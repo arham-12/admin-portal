@@ -52,7 +52,7 @@ const navigate = useNavigate();
     e.preventDefault();
   
     try {
-      const response = await axios.post('http://localhost:8000/add-department', { names: departments });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/add-department`, { names: departments });
   
       // Check if the response status is 200
       if (response.status === 200) {

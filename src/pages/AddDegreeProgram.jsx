@@ -82,7 +82,7 @@ const AddDegreeProgramPage = () => {
     const fetchDepartments = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/get-departments"
+          `${import.meta.env.VITE_API_URL}/get-departments`
         );
         setDepartments(response.data);
         const initialProgramsMap = {};
@@ -143,7 +143,7 @@ const AddDegreeProgramPage = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:8000/add-degree-program",
+        `${import.meta.env.VITE_API_URL}/add-degree-program`,
         degreeProgramsData
       );
 

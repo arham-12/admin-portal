@@ -36,14 +36,14 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         const studentsResponse = await axios.get(
-          'http://localhost:8000/api/student-count/',
+          `${import.meta.env.VITE_API_URL}/api/student-count/`,
           {
             headers: { Authorization: `Token ${authToken}` },
           }
         );
 
         const teachersResponse = await axios.get(
-          'http://localhost:8000/api/teacher-count/',
+          `${import.meta.env.VITE_API_URL}/api/teacher-count/`,
           {
             headers: { Authorization: `Token ${authToken}` },
           }

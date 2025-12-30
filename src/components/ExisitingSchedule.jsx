@@ -16,7 +16,7 @@ const ScheduleManager = () => {
       if (semester) params.append("semester", semester);
       if (instructor) params.append("instructor", instructor);
 
-      const response = await axios.get(`http://localhost:8000/api/schedules?${params.toString()}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/schedules?${params.toString()}`);
       console.log('API response:', response.data);
       setSchedules(response.data || []);
     } catch (error) {
@@ -42,7 +42,7 @@ const ScheduleManager = () => {
   };
 
   const handleSave = async (id) => {
-    await axios.put(`/api/schedules/${id}`, newScheduleData);
+    await axios.put(`${import.meta.env.VITE_API_URL}/api/schedules/${id}`, newScheduleData);
     setSchedules((prev) => prev.map(schedule => (schedule.id === id ? newScheduleData : schedule)));
     setEditingSchedule(null);
   };
