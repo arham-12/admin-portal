@@ -30,6 +30,7 @@ const AddCourse = () => {
   ==========================*/
   useEffect(() => {
     const getPrograms = async () => {
+      console.log("📡 Fetching degree programs...");
       try {
         const res = await axios.get(
           `${apiUrl}/api/degree-programs/`,
@@ -37,8 +38,11 @@ const AddCourse = () => {
             headers: { Authorization: `Token ${authToken}` },
           }
         );
+
+        console.log("✅ Degree programs response:", res.data);
         setDegreePrograms(res.data.degree_programs || []);
       } catch (err) {
+        console.error("❌ Error fetching programs:", err);
         toast.error("Failed to load degree programs");
       }
     };
@@ -50,27 +54,34 @@ const AddCourse = () => {
      INPUT HANDLER
   ==========================*/
   const handleInputChange = (e) => {
+    console.log(`✏️ Input changed: ${e.target.name}`, e.target.value);
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
   /* =========================
-     FETCH TEACHERS BY PROGRAM ID
+     FETCH TEACHERS BY PROGRAM NAME
   ==========================*/
-  const getRelevantTeachers = async (programId) => {
+  const getRelevantTeachers = async (programName) => {
+    console.log("🎯 Selected Degree Program Name:", programName);
+
     setRelevantTeachers([]);
     setSelectedTeacher("");
 
     try {
+      console.log("📡 Fetching teachers for program:", programName);
+
       const res = await axios.get(
-        `${apiUrl}/api/filter-teachers/${programId}/`,
+        `${apiUrl}/api/filter-teachers/${encodeURIComponent(programName)}/`,
         {
           headers: { Authorization: `Token ${authToken}` },
         }
       );
 
-      // IMPORTANT: confirm backend response key
+      console.log("✅ Teacher API response:", res.data);
+
       setRelevantTeachers(res.data.teacher_names || []);
     } catch (err) {
+      console.error("❌ Error fetching teachers:", err.response || err);
       toast.error("Failed to load teachers");
     }
   };
@@ -80,6 +91,15 @@ const AddCourse = () => {
   ==========================*/
   const addCourse = async (e) => {
     e.preventDefault();
+
+    console.log("📝 Add Course clicked");
+    console.log("📦 Current form state:", {
+      inputs,
+      selectedDegreeProgramId,
+      selectedDegreeProgramName,
+      selectedTeacher,
+      selectedSemester,
+    });
 
     if (
       !inputs.course_name ||
@@ -93,24 +113,31 @@ const AddCourse = () => {
     }
 
     try {
+      const payload = {
+        course_name: inputs.course_name,
+        course_code: inputs.course_code,
+        degree_program: selectedDegreeProgramName, // ID still used here
+        teacher: selectedTeacher,
+        semester: selectedSemester,
+      };
+
+      console.log("🚀 Sending payload to backend:", payload);
+
       const res = await axios.post(
         `${apiUrl}/api/courses/`,
-        {
-          course_name: inputs.course_name,
-          course_code: inputs.course_code,
-          degree_program: selectedDegreeProgramId,
-          teacher: selectedTeacher,
-          semester: selectedSemester,
-        },
+        payload,
         {
           headers: { Authorization: `Token ${authToken}` },
         }
       );
 
+      console.log("✅ Course creation response:", res);
+
       if (res.status === 201) {
         toast.success("Course added successfully!");
       }
     } catch (err) {
+      console.error("❌ Error adding course:", err.response || err);
       toast.error(
         err?.response?.data?.course_code?.[0] || "Error adding course"
       );
@@ -161,10 +188,11 @@ const AddCourse = () => {
                 <li
                   key={item.id}
                   onClick={() => {
+                    console.log("🎓 Program selected:", item);
                     setSelectedDegreeProgramId(item.id);
                     setSelectedDegreeProgramName(item.program_name);
                     setDegreeDropdown(false);
-                    getRelevantTeachers(item.id);
+                    getRelevantTeachers(item.program_name);
                   }}
                   className="px-5 py-2 cursor-pointer hover:bg-blue-50"
                 >
@@ -192,6 +220,7 @@ const AddCourse = () => {
                   <li
                     key={i}
                     onClick={() => {
+                      console.log("👨‍🏫 Teacher selected:", t);
                       setSelectedTeacher(t);
                       setTeacherDropdown(false);
                     }}
@@ -225,6 +254,7 @@ const AddCourse = () => {
                 <li
                   key={s}
                   onClick={() => {
+                    console.log("📘 Semester selected:", s);
                     setSelectedSemester(s);
                     setSemesterDropdown(false);
                   }}
