@@ -24,7 +24,7 @@ const AddCourse = () => {
     const getPrograms = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/degree-programs/",
+          `${import.meta.env.VITE_API_URL}/api/degree-programs/`,
           {
             headers: { Authorization: `Token ${authToken}` },
           }
