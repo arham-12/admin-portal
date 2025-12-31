@@ -24,7 +24,7 @@ const AddTeacherIDs = () => {
     const getPrograms = async () => {
       try {
         const response = await axios.get(
-          "https://localhost:8000/api/degree-programs/",
+          `${import.meta.env.VITE_API_URL}/api/degree-programs/`,
           {
             headers: { Authorization: `Token ${authToken}` },
           }
@@ -64,7 +64,7 @@ const AddTeacherIDs = () => {
       };
 
       const response = await axios.post(
-        "httpslocalhost:8000/api/teachers/",
+        `${import.meta.env.VITE_API_URL}/api/teachers/`,
         dataToSend,
         {
           headers: {

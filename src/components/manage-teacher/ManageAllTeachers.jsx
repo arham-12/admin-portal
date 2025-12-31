@@ -22,7 +22,7 @@ const ManageAllTeachers = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:8000/api/teachers/", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/teachers/`, {
           headers: { Authorization: `Token ${authToken}` },
         });
         setTeachers(res.data);
@@ -45,7 +45,7 @@ const ManageAllTeachers = () => {
           console.log("Searching teachers with email:", teacherEmail); // Log email to check
           
           const response = await axios.get(
-            `http://localhost:8000/api/teachers/${teacherEmail}/`, // Change API endpoint to match URL format
+            `${import.meta.env.VITE_API_URL}/api/teachers/${teacherEmail}/`, // Change API endpoint to match URL format
             {
               headers: { Authorization: `Token ${authToken}` },
             }
@@ -67,7 +67,7 @@ const ManageAllTeachers = () => {
         }
       } else {
         // Reset to all teachers when input is cleared
-        const res = await axios.get("http://localhost:8000/api/teachers/", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/teachers/`, {
           headers: { Authorization: `Token ${authToken}` },
         });
         setTeachers(res.data);

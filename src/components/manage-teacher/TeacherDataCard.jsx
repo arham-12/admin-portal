@@ -10,7 +10,7 @@ const TeacherDataCard = ({ teacher, name, email,teacher_type, id, degree_program
       <DeleteDialogBox
         Show={showDeleteBox}
         setShow={setshowDeleteBox}
-        apiUrl={`http://localhost:8000/api/teachers/${email}/`}
+        apiUrl={`${import.meta.env.VITE_API_URL}/api/teachers/${email}/`}
       />
       <EditTeacherBox
         teacher={teacher}
